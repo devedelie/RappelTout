@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "762313352386",
+    "firebase_url": "https://rapeltout.firebaseio.com",
+    "project_id": "rapeltout",
+    "storage_bucket": "rapeltout.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:762313352386:android:519db309dbcf368115475b",
+        "android_client_info": {
+          "package_name": "com.elbaz.eliran.rappeltout"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "762313352386-p2npoa89nsqqg47c02o26jo8qbvpfptr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXffEfsGgF8DNUhhkwKZxWPIjkXSdl4ws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "762313352386-p2npoa89nsqqg47c02o26jo8qbvpfptr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
