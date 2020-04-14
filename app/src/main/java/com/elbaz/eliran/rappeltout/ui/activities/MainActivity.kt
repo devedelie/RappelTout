@@ -10,7 +10,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import com.elbaz.eliran.rappeltout.R
-import com.elbaz.eliran.rappeltout.model.Note
+import com.elbaz.eliran.rappeltout.model.Reminder
 
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .setAction("Action", null).show()
         }
 
-        var note = Note("title", "bla bla bla")
+//        var note = Reminder("title", "bla bla bla")
 
     }
 
