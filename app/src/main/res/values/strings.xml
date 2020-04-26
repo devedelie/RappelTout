@@ -24,9 +24,10 @@
 
     <!-- SetReminderActivity  -->
     <string name="start">Start</string>
-    <string name="hh_mm">HH:mm</string>
+    <string name="hh_mm_start">10:00</string>
+    <string name="hh_mm_end">11:00</string>
     <string name="end">End</string>
-    <string name="before_event">before event</string>
+    <string name="before_event">%1$s %2$s before event</string>
     <string name="location">Location</string>
     <string name="repeat">Repeat</string>
     <string name="notes">Notes</string>

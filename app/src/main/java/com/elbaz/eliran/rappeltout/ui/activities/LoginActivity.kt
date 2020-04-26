@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.elbaz.eliran.rappeltout.R
@@ -51,30 +52,32 @@ class LoginActivity : AppCompatActivity() {
 
     fun gmailSignIn(view: View) {
         // Create and launch sign-in intent
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setTheme(R.style.LoginTheme)
-                .setAvailableProviders(
-                    arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()))
-                .setIsSmartLockEnabled(false, true)
-                .setLogo(R.drawable.fui_ic_anonymous_white_24dp)
-                .build(),
-            RC_SIGN_IN)
+        Toast.makeText(this, "This action was not implemented", Toast.LENGTH_LONG).show()
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setTheme(R.style.LoginTheme)
+//                .setAvailableProviders(
+//                    arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()))
+//                .setIsSmartLockEnabled(false, true)
+//                .setLogo(R.drawable.fui_ic_anonymous_white_24dp)
+//                .build(),
+//            RC_SIGN_IN)
     }
 
     fun facebookSignIn(view: View) {
         // Create and launch sign-in intent
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setTheme(R.style.LoginTheme)
-                .setAvailableProviders(
-                    arrayListOf(AuthUI.IdpConfig.FacebookBuilder().build()))
-                .setIsSmartLockEnabled(false, true)
-                .setLogo(R.drawable.fui_ic_anonymous_white_24dp)
-                .build(),
-            RC_SIGN_IN)
+        Toast.makeText(this, "This action was not implemented", Toast.LENGTH_LONG).show()
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setTheme(R.style.LoginTheme)
+//                .setAvailableProviders(
+//                    arrayListOf(AuthUI.IdpConfig.FacebookBuilder().build()))
+//                .setIsSmartLockEnabled(false, true)
+//                .setLogo(R.drawable.fui_ic_anonymous_white_24dp)
+//                .build(),
+//            RC_SIGN_IN)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

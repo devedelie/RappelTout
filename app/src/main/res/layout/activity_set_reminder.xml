@@ -63,16 +63,20 @@
                         android:layout_marginTop="15dp"
                         android:text="@string/start"/>
                     <TextView
+                        android:id="@+id/start_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="@{setReminderViewModel.date}"/>
+                        android:text="@{setReminderViewModel.startDate}"
+                        android:onClick="onDateClicked"/>
                     <TextView
+                        android:id="@+id/start_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
-                        android:text="@string/hh_mm" />
+                        android:text="@{setReminderViewModel.startTime}"
+                        android:onClick="onTimeClicked"/>
                 </LinearLayout>
 
                 <!--Right container -->
@@ -88,16 +92,20 @@
                         android:layout_marginTop="15dp"
                         android:text="@string/end" />
                     <TextView
+                        android:id="@+id/end_date"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="3dp"
-                        android:text="@{setReminderViewModel.date}"/>
+                        android:text="@{setReminderViewModel.endDate}"
+                        android:onClick="onDateClicked"/>
                     <TextView
+                        android:id="@+id/end_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
-                        android:text="@string/hh_mm" />
+                        android:text="@{setReminderViewModel.endTime}"
+                        android:onClick="onTimeClicked"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -143,7 +151,8 @@
             android:orientation="horizontal"
             android:layout_marginTop="45dp"
             android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp">
+            android:layout_marginEnd="25dp"
+            android:onClick="defineAlertTimeBeforeEvent">
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -152,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="@string/before_event"/>
+                android:text="@{@string/before_event(setReminderViewModel.valueBeforeEvent, setReminderViewModel.beforeEvent)}"/>
         </LinearLayout>
 
         <!--  Location      -->

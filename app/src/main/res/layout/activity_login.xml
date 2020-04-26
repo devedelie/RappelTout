@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_width="170dp"
                 android:layout_height="170dp"
-                android:background="@drawable/fui_ic_anonymous_white_24dp"
+                android:background="@drawable/ic_access_alarm_white_78dp"
                 android:layout_marginEnd="@dimen/default_large_margin"
                 android:layout_marginStart="@dimen/default_large_margin" />
 

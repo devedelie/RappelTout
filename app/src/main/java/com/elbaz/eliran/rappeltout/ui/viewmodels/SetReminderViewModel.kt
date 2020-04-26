@@ -5,13 +5,13 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.SystemClock
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.elbaz.eliran.rappeltout.receiver.AlarmReceiver
+import com.elbaz.eliran.rappeltout.utils.Utils
 import com.elbaz.eliran.rappeltout.utils.singleArgViewModelFactory
 import java.util.*
 
@@ -33,14 +33,87 @@ class SetReminderViewModel (private val app: Application) : AndroidViewModel(app
         val FACTORY = singleArgViewModelFactory(::SetReminderViewModel)
     }
 
-    private val _date = MutableLiveData("date")
+    private val _startDate = MutableLiveData("date")
+    private val _endDate = MutableLiveData("date")
+    private val _startTime = MutableLiveData("HH:mm")
+    private val _endTime = MutableLiveData("HH:mm")
+    private val _beforeEvent = MutableLiveData(ValueBeforeEvent.DAYS_BEFORE.string)
+    private val _valueBeforeEvent = MutableLiveData(1)
 
-    val date : LiveData<String> = _date
+    val startDate : LiveData<String> = _startDate
+    val endDate : LiveData<String> = _endDate
+    val startTime : LiveData<String> = _startTime
+    val endTime : LiveData<String> = _endTime
+    val beforeEvent : LiveData<String> = _beforeEvent
+    val valueBeforeEvent : LiveData<Int> = _valueBeforeEvent
 
-    fun setDate(date : String){
-        _date.value = date
+    fun setStartDate(startDate : String){
+        _startDate.value = startDate
     }
 
+    fun setEndDate(endDate : String){
+        _endDate.value = endDate
+    }
+
+    fun setStartTime(startTime : String){
+        _startTime.value = startTime
+//        verifyTiming()
+    }
+
+    fun setEndTime(endTime : String){
+        _endTime.value = endTime
+    }
+
+    fun setBeforeEvent(beforeEvent : String){
+        _beforeEvent.value = beforeEvent
+    }
+
+    fun setValueBeforeEvent(valueBeforeEvent : Int){
+        _valueBeforeEvent.value = valueBeforeEvent
+    }
+
+    private fun toastMessage(message : String) = Toast.makeText(app, message, Toast.LENGTH_LONG).show()
+    private fun verifyDates(dateStart : Date, dateEnd : Date) = dateEnd >= dateStart
+    private fun verifyDateBig(dateStart : Date, dateEnd : Date) = dateEnd > dateStart
+    private fun verifyTimes(timeStart : Date, timeEnd : Date) = timeEnd > timeStart
+    // Functions to transform String to Date()
+    private fun dateStart() = _startDate.value?.let { Utils.stringToDate(it) }
+    private fun dateEnd() = _endDate.value?.let { Utils.stringToDate(it) }
+    private fun timeStart() = _startTime.value?.let { Utils.stringToTime(it) }
+    private fun timeEnd() = _endTime.value?.let { Utils.stringToTime(it) }
+
+
+    fun setDates(receivedDate : Date, isStart : Boolean) {
+        if(isStart){
+            when (verifyDates(receivedDate, dateEnd()!!)) {
+                true -> _startDate.value = Utils.dateToString(receivedDate)
+                else -> toastMessage("End-Date cannot be earlier than Start-Date")
+            }
+        }else{ // end-date view
+            when (verifyDates(dateStart()!! , receivedDate)) {
+                true -> _endDate.value = Utils.dateToString(receivedDate)
+                else -> toastMessage("End-Date cannot be earlier than Start-Date")
+            }
+        }
+    }
+
+    fun setTimes(receivedTime : Date , isStart : Boolean){
+        // If end-date is bigger than start-Date, allow any hour selection
+        if(verifyDateBig(dateStart()!!, dateEnd()!!)) {
+            when(isStart){
+                true -> _startTime.value = Utils.timeToString(receivedTime)
+                else -> _endTime.value = Utils.timeToString(receivedTime)
+            }
+        }else{ // Else, (same day)  make sure that start-time isn't bigger than end-time
+            if(isStart && verifyTimes(receivedTime, timeEnd()!!)){
+                 _startTime.value = Utils.timeToString(receivedTime)
+            }else if (!isStart && verifyTimes(timeStart()!!, receivedTime)){
+                _endTime.value = Utils.timeToString(receivedTime)
+            }else{
+                toastMessage("Start-Time cannot be later than End-Time")
+            }
+        }
+    }
 
 
     /**
@@ -113,15 +186,18 @@ class SetReminderViewModel (private val app: Application) : AndroidViewModel(app
 
 
 
-    enum class repeatTiming {
+    enum class RepeatTiming {
         INTERVAL_FIFTEEN_MINUTES,
         INTERVAL_HALF_HOUR,
         INTERVAL_HOUR,
         INTERVAL_HALF_DAY,
-        INTERVAL_DAY,
+        INTERVAL_DAY
     }
 
-    fun test(){
-        Toast.makeText(app, "OnReceive alarm test top", Toast.LENGTH_SHORT).show()
+    enum class ValueBeforeEvent(val string: String){
+        MINUTES_BEFORE("minute(s)"),
+        HOURS_BEFORE("hour(s)"),
+        DAYS_BEFORE("day(s)")
     }
+
 }
