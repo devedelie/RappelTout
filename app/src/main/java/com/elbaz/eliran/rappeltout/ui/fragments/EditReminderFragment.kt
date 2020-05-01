@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.databinding.FragmentEditReminderBinding
 import com.elbaz.eliran.rappeltout.events.BackBtnPressEvent
+import com.elbaz.eliran.rappeltout.model.Reminder
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
 import com.elbaz.eliran.rappeltout.utils.Utils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -76,10 +77,31 @@ class EditReminderFragment : Fragment() {
         set_time_before_event.setOnClickListener{ v -> defineAlertTimeBeforeEvent(v) }
         event_color.setOnClickListener{ v -> defineEventColor(v) }
         back_button.setOnClickListener{v -> onBackBtnClicked(v)}
+        save_button.setOnClickListener{v -> onSaveBtnClicked(v)}
     }
 
     private fun onBackBtnClicked(view: View){
         EventBus.getDefault().post(BackBtnPressEvent())
+    }
+
+    private fun onSaveBtnClicked(view: View){
+        var reminder3 = Reminder(
+            "Reminder3",
+            "Reminder3 Content",
+            -1544140,
+            "02/05/2020",
+            "15:00",
+            "16:00",
+            "25/05/2020",
+            "25/05/2020",
+            "25/05/2020",
+            "10:00",
+            "Paris 75012",
+            4,
+            true,
+            true)
+        viewModel.insert(reminder3)
+        EventBus.getDefault().post(BackBtnPressEvent()) // Event to close the fragment
     }
 
     private fun onDateClicked (view : View){

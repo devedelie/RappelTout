@@ -57,10 +57,10 @@ class SetReminderActivity : AppCompatActivity() {
 //        backBtn.setOnClickListener{
 //            finish()
 //        }
-        val saveBtn : TextView = findViewById(R.id.activity_save_button)
-        saveBtn.setOnClickListener{
-//            viewModel.saveReminderAction()
-        }
+//        val saveBtn : TextView = findViewById(R.id.activity_save_button)
+//        saveBtn.setOnClickListener{
+////            viewModel.saveReminderAction()
+//        }
     }
 
     override fun onBackPressed() {

@@ -35,7 +35,7 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
     val allReminders: LiveData<List<Reminder>>
 
     init{
-        val reminderDao = ReminderRoomDB.getDatabase(app).reminderDao()
+        val reminderDao = ReminderRoomDB.getDatabase(app, viewModelScope).reminderDao()
         repository = ReminderRepository(reminderDao)
         allReminders = repository.allReminders
     }

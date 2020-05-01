@@ -9,13 +9,21 @@ import java.util.*
  * Created by Eliran Elbaz on 13-Apr-20.
  */
 @Entity(tableName = "reminder_table")
-data class Reminder (@PrimaryKey(autoGenerate = true) val id : String,
-                     val title : String,
-                     val content : String,
-                     val eventColor : Int,
-                     val creationDate : String,
-                     val alarmFullDate : String,
-                     val eventAddress : String,
-                     val repeatTimes : Int,
-                     val isRepeating : Boolean,
-                     val isActive : Boolean )
+class Reminder(val title : String,
+               val content : String,
+               val eventColor : Int,
+               val creationDate : String,
+               val startTime : String,
+               val endTime : String,
+               val startDate : String,
+               val endDate : String,
+               val alarmDate : String,
+               val alarmTime : String,
+               val eventAddress : String,
+               val repeatTimes : Int,
+               val isRepeating : Boolean,
+               val isActive : Boolean
+){
+    @PrimaryKey(autoGenerate = true)
+    var id : Int? = null
+}

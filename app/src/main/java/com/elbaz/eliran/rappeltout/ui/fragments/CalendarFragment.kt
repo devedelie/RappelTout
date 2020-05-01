@@ -9,12 +9,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.databinding.FragmentCalendarBinding
 import com.elbaz.eliran.rappeltout.ui.activities.MainActivity
+import com.elbaz.eliran.rappeltout.ui.adapters.ReminderListAdapter
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
+import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_edit_reminder.*
 
 class CalendarFragment : Fragment() {
@@ -46,6 +51,8 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         calendarConfig(view)
+        recyclerViewConfig()
+        setDatabaseObserver()
     }
 
 
@@ -58,5 +65,23 @@ class CalendarFragment : Fragment() {
 //            viewModel.onReminderAdd(dayOfMonth, month+1, year)
             viewModel.onReminderAdd(date)
         }
+    }
+
+    fun recyclerViewConfig(){
+        val recyclerView = requireActivity().findViewById<RecyclerView>(R.id.recyclerview)
+        // OR recyclerView.***  ?
+        val adapter = ReminderListAdapter(requireContext())
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // fun setDatabaseObserver()
+        viewModel.allReminders.observe(requireActivity(), Observer { reminders ->
+            // Update the cached copy of the reminders in the adapter
+            reminders?.let { adapter.setReminder(it) }
+        })
+    }
+
+    fun setDatabaseObserver(){
+
     }
 }

@@ -1,9 +1,11 @@
 package com.elbaz.eliran.rappeltout.utils
 
 import androidx.room.TypeConverter
+import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.util.*
+import kotlin.collections.ArrayList
+
 
 /**
  * Created by Eliran Elbaz on 30-Apr-20.

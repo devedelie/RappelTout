@@ -22,11 +22,13 @@
             android:orientation="vertical"
             android:layout_margin="10dp">
             <TextView
+                android:id="@+id/start_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="10:00"
                 android:layout_marginBottom="10dp"/>
             <TextView
+                android:id="@+id/end_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="11:00"/>
@@ -36,10 +38,12 @@
         <LinearLayout
             android:id="@+id/card_text"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
             <!-- Title -->
             <TextView
-                android:id="@+id/item_type_text"
+                android:id="@+id/item_title_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -48,8 +52,17 @@
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textStyle="bold"
-                android:text="Reminder Title"
-                android:layout_gravity="center"/>
+                android:text="Reminder Title" />
+            <TextView
+                android:id="@+id/item_content_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/item_location_text"
+                android:layout_marginStart="15dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Reminder content" />
         </LinearLayout>
 
     </LinearLayout>
