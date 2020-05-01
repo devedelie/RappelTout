@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activities.DisplayReminderActivity" /> <!-- UIs -->
+        <!-- UIs -->
+        <activity android:name=".ui.activities.DisplayReminderActivity" />
         <activity android:name=".ui.activities.SetReminderActivity" />
         <activity android:name=".ui.activities.LoginActivity" />
         <activity android:name=".ui.activities.MainActivity" />
@@ -29,7 +30,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Receivers -->
+        </activity>
+
+        <!-- Receivers -->
         <receiver
             android:name=".receiver.AlarmReceiver"
             android:enabled="true"

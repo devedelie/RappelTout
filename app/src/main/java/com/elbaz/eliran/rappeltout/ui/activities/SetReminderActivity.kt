@@ -53,10 +53,10 @@ class SetReminderActivity : AppCompatActivity() {
     //----------------
 
     private fun configureButtons() {
-        val backBtn : ImageView = findViewById(R.id.activity_back_button)
-        backBtn.setOnClickListener{
-            finish()
-        }
+//        val backBtn : ImageView = findViewById(R.id.activity_back_button)
+//        backBtn.setOnClickListener{
+//            finish()
+//        }
         val saveBtn : TextView = findViewById(R.id.activity_save_button)
         saveBtn.setOnClickListener{
 //            viewModel.saveReminderAction()
@@ -75,27 +75,27 @@ class SetReminderActivity : AppCompatActivity() {
 //            cal.set(Calendar.MINUTE, minute)
 //            val time = SimpleDateFormat("HH:mm").format(cal.time)
             when (view) {
-                start_time -> viewModel.setTimes(Utils.stringToTime("$hour:$minute"), true)
-                end_time -> viewModel.setTimes(Utils.stringToTime("$hour:$minute"), false) // TODO: Try to add +1 hour when setting the start time
+//                start_time -> viewModel.setTimes(Utils.stringToTime("$hour:$minute"), true)
+//                end_time -> viewModel.setTimes(Utils.stringToTime("$hour:$minute"), false) // TODO: Try to add +1 hour when setting the start time
             }
         }
         TimePickerDialog(this, timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
     }
 
-    fun onDateClicked (view : View){
-        val year = cal.get(Calendar.YEAR)
-        val month = cal.get(Calendar.MONTH)
-        val day = cal.get(Calendar.DAY_OF_MONTH)
-
-        val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { datePicker, year, monthOfYear, dayOfMonth ->
-            var toDate = Utils.stringToDate("$dayOfMonth/${(monthOfYear+1)}/$year")
-            when(view){
-                start_date -> viewModel.setDates(toDate, true)
-                end_date -> viewModel.setDates(toDate, false)
-            }
-        }, year, month, day)
-        dpd.show()
-    }
+//    fun onDateClicked (view : View){
+//        val year = cal.get(Calendar.YEAR)
+//        val month = cal.get(Calendar.MONTH)
+//        val day = cal.get(Calendar.DAY_OF_MONTH)
+//
+//        val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { datePicker, year, monthOfYear, dayOfMonth ->
+//            var toDate = Utils.stringToDate("$dayOfMonth/${(monthOfYear+1)}/$year")
+//            when(view){
+//                start_date -> viewModel.setDates(toDate, true)
+//                end_date -> viewModel.setDates(toDate, false)
+//            }
+//        }, year, month, day)
+//        dpd.show()
+//    }
 
     fun defineAlertTimeBeforeEvent(view: View){
         val singleItems = arrayOf("Minutes", "Hours", "Days")

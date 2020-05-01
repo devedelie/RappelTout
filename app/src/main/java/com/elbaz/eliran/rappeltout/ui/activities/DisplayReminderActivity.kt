@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.elbaz.eliran.rappeltout.R
-import com.elbaz.eliran.rappeltout.ui.viewmodels.ReminderViewModel
+
 import com.elbaz.eliran.rappeltout.ui.viewmodels.SetReminderViewModel
 import kotlinx.android.synthetic.main.activity_display_reminder.*
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,7 +19,7 @@ class DisplayReminderActivity : AppCompatActivity() , TextToSpeech.OnInitListene
     private var tts: TextToSpeech? = null
     private var buttonSpeak: Button? = null
     private var editText: EditText? = null
-    private val viewModel by lazy { ViewModelProviders.of(this).get(ReminderViewModel::class.java) }
+//    private val viewModel by lazy { ViewModelProviders.of(this).get(ReminderViewModel::class.java) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

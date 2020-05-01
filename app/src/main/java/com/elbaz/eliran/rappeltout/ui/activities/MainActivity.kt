@@ -1,72 +1,80 @@
 package com.elbaz.eliran.rappeltout.ui.activities
 
-import android.annotation.SuppressLint
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.databinding.ActivityMainBinding
+import com.elbaz.eliran.rappeltout.events.BackBtnPressEvent
+import com.elbaz.eliran.rappeltout.ui.fragments.CalendarFragment
+import com.elbaz.eliran.rappeltout.ui.fragments.EditReminderFragment
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
 import com.firebase.ui.auth.AuthUI
-import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import io.opencensus.trace.MessageEvent
+import kotlinx.android.synthetic.main.fragment_calendar.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+
 
 class MainActivity : AppCompatActivity() {
 
     // Obtain ViewModel from ViewModelProviders
     private val viewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    lateinit var binding : ActivityMainBinding
+    // Fragments
+    private val calendarFragment = CalendarFragment()
+    private val editReminderFragment = EditReminderFragment()
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
 
-
         // DataBinding
-        val binding : ActivityMainBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding  = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.mainViewModel = viewModel
 
-        setSupportActionBar(toolbar)
+//        setSupportActionBar(toolbar)
 
+        // Load calendar fragment as default
+        supportFragmentManager.beginTransaction()
+            .add(R.id.host_fragment, calendarFragment)
+            .commit()
 
-//        floatingBtnConfig()
-        calendarConfig()
-        start("second")
+//        start("second")
     }
 
-
-//    fun floatingBtnConfig(){
-//        floatingBtn.setOnClickListener { view ->
-//            Snackbar.make(view, "Floating button action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show()
-//        }
-//    }
-
-    fun onClickAddReminder(view: View){
-        val intent = Intent(this@MainActivity, SetReminderActivity::class.java)
-        intent.putExtra("Date", viewModel.selectedDate.value.toString())
-        startActivity(intent)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onBackBtnEvent(event: BackBtnPressEvent?) { /* Do something */
+        println("XXX event happened")
+        loadFragment(calendarFragment)
     }
 
-    @SuppressLint("SimpleDateFormat")
-    fun calendarConfig(){
-        val calendarView = findViewById<CalendarView>(R.id.calendar)
-        calendarView?.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            // months are indexed from 0. So, 0 means January, 1 means february, 2 means march etc.
-            val date = "$dayOfMonth/${(month + 1)}/$year"
-//            viewModel.onReminderAdd(dayOfMonth, month+1, year)
-            viewModel.onReminderAdd(date)
+    fun onFloatingBtnClicked(view: View){
+            loadFragment(editReminderFragment)
+    }
+
+    private fun loadFragment(fragment: Fragment){
+        when (fragment){
+            editReminderFragment -> binding.floatingBtn.hide()
+            calendarFragment -> binding.floatingBtn.show()
         }
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.host_fragment, fragment)
+        fragmentTransaction.commit()
     }
 
 
@@ -122,5 +130,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     /////////////// TODO: End of Test
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 
 }
