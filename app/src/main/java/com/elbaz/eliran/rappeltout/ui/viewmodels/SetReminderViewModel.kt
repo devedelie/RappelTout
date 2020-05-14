@@ -77,43 +77,43 @@ class SetReminderViewModel (private val app: Application) : AndroidViewModel(app
     private fun verifyDateBig(dateStart : Date, dateEnd : Date) = dateEnd > dateStart
     private fun verifyTimes(timeStart : Date, timeEnd : Date) = timeEnd > timeStart
     // Functions to transform String to Date()
-    private fun dateStart() = _startDate.value?.let { Utils.stringToDate(it) }
-    private fun dateEnd() = _endDate.value?.let { Utils.stringToDate(it) }
-    private fun timeStart() = _startTime.value?.let { Utils.stringToTime(it) }
-    private fun timeEnd() = _endTime.value?.let { Utils.stringToTime(it) }
-
-
-    fun setDates(receivedDate : Date, isStart : Boolean) {
-        if(isStart){
-            when (verifyDates(receivedDate, dateEnd()!!)) {
-                true -> _startDate.value = Utils.dateToString(receivedDate)
-                else -> toastMessage("End-Date cannot be earlier than Start-Date")
-            }
-        }else{ // end-date view
-            when (verifyDates(dateStart()!! , receivedDate)) {
-                true -> _endDate.value = Utils.dateToString(receivedDate)
-                else -> toastMessage("End-Date cannot be earlier than Start-Date")
-            }
-        }
-    }
-
-    fun setTimes(receivedTime : Date , isStart : Boolean){
-        // If end-date is bigger than start-Date, allow any hour selection
-        if(verifyDateBig(dateStart()!!, dateEnd()!!)) {
-            when(isStart){
-                true -> _startTime.value = Utils.timeToString(receivedTime)
-                else -> _endTime.value = Utils.timeToString(receivedTime)
-            }
-        }else{ // Else, (same day)  make sure that start-time isn't bigger than end-time
-            if(isStart && verifyTimes(receivedTime, timeEnd()!!)){
-                 _startTime.value = Utils.timeToString(receivedTime)
-            }else if (!isStart && verifyTimes(timeStart()!!, receivedTime)){
-                _endTime.value = Utils.timeToString(receivedTime)
-            }else{
-                toastMessage("Start-Time cannot be later than End-Time")
-            }
-        }
-    }
+//    private fun dateStart() = _startDate.value?.let { Utils.stringToDate(it) }
+//    private fun dateEnd() = _endDate.value?.let { Utils.stringToDate(it) }
+//    private fun timeStart() = _startTime.value?.let { Utils.stringToTime(it) }
+//    private fun timeEnd() = _endTime.value?.let { Utils.stringToTime(it) }
+//
+//
+//    fun setDates(receivedDate : Date, isStart : Boolean) {
+//        if(isStart){
+//            when (verifyDates(receivedDate, dateEnd()!!)) {
+//                true -> _startDate.value = Utils.dateToString(receivedDate)
+//                else -> toastMessage("End-Date cannot be earlier than Start-Date")
+//            }
+//        }else{ // end-date view
+//            when (verifyDates(dateStart()!! , receivedDate)) {
+//                true -> _endDate.value = Utils.dateToString(receivedDate)
+//                else -> toastMessage("End-Date cannot be earlier than Start-Date")
+//            }
+//        }
+//    }
+//
+//    fun setTimes(receivedTime : Date , isStart : Boolean){
+//        // If end-date is bigger than start-Date, allow any hour selection
+//        if(verifyDateBig(dateStart()!!, dateEnd()!!)) {
+//            when(isStart){
+//                true -> _startTime.value = Utils.timeToString(receivedTime)
+//                else -> _endTime.value = Utils.timeToString(receivedTime)
+//            }
+//        }else{ // Else, (same day)  make sure that start-time isn't bigger than end-time
+//            if(isStart && verifyTimes(receivedTime, timeEnd()!!)){
+//                 _startTime.value = Utils.timeToString(receivedTime)
+//            }else if (!isStart && verifyTimes(timeStart()!!, receivedTime)){
+//                _endTime.value = Utils.timeToString(receivedTime)
+//            }else{
+//                toastMessage("Start-Time cannot be later than End-Time")
+//            }
+//        }
+//    }
 
 
     /**

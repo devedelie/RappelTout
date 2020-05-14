@@ -5,9 +5,11 @@ import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -33,6 +35,7 @@ class EditReminderFragment : Fragment() {
 
     private lateinit var viewModel: MainViewModel
     private val cal = Calendar.getInstance()
+    private var isEditMode : Boolean = false
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -48,15 +51,22 @@ class EditReminderFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.mainViewModel = viewModel
 
+        // Verify Fragment mode and execute action (Edit / Create)
+        viewModel.isEditMode.observe(viewLifecycleOwner, androidx.lifecycle.Observer { isEdit ->
+            // Update the cached copy of the reminders in the adapter
+            updateUiForEditMode(isEdit)
+        })
+
         // Inflate the layout for this fragment
         return binding.root
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.setStartTime(Utils.getCurrentDateOrTimeString(false))
-        viewModel.setEndTime(Utils.getCurrentDateOrTimeString(false))
+//        viewModel.setStartTime(Utils.getCurrentDateOrTimeString(false))
+//        viewModel.setEndTime(Utils.getCurrentDateOrTimeString(false))
 
         // Event Color (by default or from DB)
 //        viewModel.eventColor.value?.let { event_color.setCardBackgroundColor(it) }
@@ -80,28 +90,22 @@ class EditReminderFragment : Fragment() {
         save_button.setOnClickListener{v -> onSaveBtnClicked(v)}
     }
 
+    /****************************
+     * ACTIONS
+     ****************************/
+
     private fun onBackBtnClicked(view: View){
         EventBus.getDefault().post(BackBtnPressEvent())
     }
 
     private fun onSaveBtnClicked(view: View){
-        var reminder3 = Reminder(
-            "Reminder3",
-            "Reminder3 Content",
-            -1544140,
-            "02/05/2020",
-            "15:00",
-            "16:00",
-            "25/05/2020",
-            "25/05/2020",
-            "25/05/2020",
-            "10:00",
-            "Paris 75012",
-            4,
-            true,
-            true)
-        viewModel.insert(reminder3)
-        EventBus.getDefault().post(BackBtnPressEvent()) // Event to close the fragment
+        var address = if(event_address.text.toString().isNotEmpty())  "" else event_address.text.toString()
+        if(title_edit_text.text.toString().isNotEmpty()){
+            viewModel.manageSavingAction(title_edit_text.text.toString(), address)
+            EventBus.getDefault().post(BackBtnPressEvent()) // Event to close the fragment
+        }else{
+            Toast.makeText(requireActivity(), "Please add a title", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun onDateClicked (view : View){
@@ -110,10 +114,10 @@ class EditReminderFragment : Fragment() {
         val day = cal.get(Calendar.DAY_OF_MONTH)
 
         val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { datePicker, year, monthOfYear, dayOfMonth ->
-            var toDate = Utils.stringToDate("$dayOfMonth/${(monthOfYear+1)}/$year")
+            val date = Utils.convertStringToDate("$dayOfMonth/${(monthOfYear+1)}/$year")
             when(view){
-                start_date -> viewModel.setDates(toDate, true)
-                end_date -> viewModel.setDates(toDate, false)
+                start_date -> viewModel.pickStartDate(date!!)
+                end_date -> viewModel.pickEndDate(date!!)
             }
         }, year, month, day)
         dpd.show()
@@ -122,12 +126,10 @@ class EditReminderFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     fun onTimeClicked(view: View){  // TimePicker Spinner-Style is defined in Styles.xml
         val timeSetListener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
-//            cal.set(Calendar.HOUR_OF_DAY, hour)
-//            cal.set(Calendar.MINUTE, minute)
-//            val time = SimpleDateFormat("HH:mm").format(cal.time)
+            val time = Utils.convertStringToTime("$hour:$minute")
             when (view) {
-                start_time -> viewModel.setTimes(Utils.stringToTime("$hour:$minute"), true)
-                end_time -> viewModel.setTimes(Utils.stringToTime("$hour:$minute"), false) // TODO: Try to add +1 hour when setting the start time
+                start_time -> viewModel.pickStartTime(time!!)
+                end_time -> viewModel.pickEndTime(time!!)
             }
         }
         TimePickerDialog(requireContext(), timeSetListener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
@@ -135,7 +137,7 @@ class EditReminderFragment : Fragment() {
 
     private fun defineAlertTimeBeforeEvent(view: View){
         val singleItems = arrayOf("Minutes", "Hours", "Days")
-        var checkedItem = 1
+        var checkedItem = -1 // non selected item
         MaterialAlertDialogBuilder(requireContext())
             .setIcon(android.R.drawable.ic_lock_idle_alarm)
             .setTitle("Before Event")
@@ -155,7 +157,7 @@ class EditReminderFragment : Fragment() {
             .show()
     }
 
-    private fun setValueBeforeEvent(value : String) = viewModel.setBeforeEvent(value)
+    private fun setValueBeforeEvent(value : String) = viewModel.setTimeBeforeEvent(value)
 
 
     private fun defineEventColor(view: View){
@@ -173,5 +175,40 @@ class EditReminderFragment : Fragment() {
             .setDefaultColorButton(Color.parseColor("#f84c44"))
             .setColumns(5)
             .show()
+    }
+
+    private fun updateUiForEditMode(isEditMode: Boolean){
+        Log.d("isEditMode2", "Received $isEditMode")
+        if(isEditMode){ // Then update UI elements from DB
+            // TODO: Update ViewModel LiveData's with details from requested Reminder model,
+            //  the DataBinding will update the View automatically...
+            viewModel.updateUiVariablesForEditMode()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("XXXCHECK onPause", "Received")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("XXXCHECK onStop", "Received")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("XXXCHECK onDestroyView", "Received")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("XXXCHECK onDestroy", "Received")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("XXXCHECK onDetach", "Received")
+        viewModel.resetUiElements()
     }
 }

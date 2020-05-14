@@ -42,8 +42,8 @@ class SetReminderActivity : AppCompatActivity() {
         val receivedDate = intent.getStringExtra("Date") // Get date from intent
         viewModel.setStartDate(receivedDate) // Set dates in viewModel
         viewModel.setEndDate(receivedDate)
-        viewModel.setStartTime(Utils.getCurrentDateOrTimeString(false))
-        viewModel.setEndTime(Utils.getCurrentDateOrTimeString(false))
+//        viewModel.setStartTime(Utils.getCurrentDateOrTimeString(false))
+//        viewModel.setEndTime(Utils.getCurrentDateOrTimeString(false))
 
        configureButtons()
     }

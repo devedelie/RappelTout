@@ -1,6 +1,5 @@
 package com.elbaz.eliran.rappeltout.ui.viewmodels
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
@@ -20,13 +19,18 @@ import com.elbaz.eliran.rappeltout.utils.Utils
 import com.elbaz.eliran.rappeltout.utils.singleArgViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 import java.util.*
 
 /**
  * Created by Eliran Elbaz on 18-Apr-20.
  */
 class MainViewModel (private val app: Application) : AndroidViewModel(app) {
+
+    // Date initialization
+    private var timeZone = DateTimeZone.forID("Europe/Paris")
+    private var fullCurrentDate = DateTime.now(timeZone)
 
     /****************************
      * For Repository and DB
@@ -41,7 +45,7 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
     }
 
     //Launching a new coroutine to insert the data in a non-blocking way
-    fun insert(reminder: Reminder) = viewModelScope.launch(Dispatchers.IO) {
+    private fun insert(reminder: Reminder) = viewModelScope.launch(Dispatchers.IO) {
         repository.insert(reminder)
     }
 
@@ -54,75 +58,82 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
      * For Injection
      ****************************/
     companion object {
-        /**
-         * Factory for creating [MainViewModel]
-         *
-         * @param arg the repository to pass to [MainViewModel]
-         */
+        //Factory for creating [MainViewModel]
         val FACTORY = singleArgViewModelFactory(::MainViewModel)
     }
-
 
     /****************************
      * DATA
      ****************************/
+    
+    private lateinit var reminder : Reminder
+    private var reminderPosition : Int = -1
+    private val _isEditMode = MutableLiveData(false)
 
-//    // Set default date (when user don't select any date)
-    @SuppressLint("SimpleDateFormat")
-    private val sdf = SimpleDateFormat("dd/M/yyyy")
-    private val formattedDate = sdf.format(Date())
-
-    private val _selectedDate = MutableLiveData(formattedDate) // As default: current date
-    private val _startDate = MutableLiveData(formattedDate)
-    private val _endDate = MutableLiveData(formattedDate)
-    private val _startTime = MutableLiveData("HH:mm")
-    private val _endTime = MutableLiveData("HH:mm")
-    private val _beforeEvent = MutableLiveData(ValueBeforeEvent.DAYS_BEFORE.string)
-    private val _valueBeforeEvent = MutableLiveData(1)
+    // Configure MutableLiveDate with default values
+    private val _title = MutableLiveData("")
+    private val _selectedDate = MutableLiveData(fullCurrentDate) // As default: current date
+    private val _startDate = MutableLiveData(fullCurrentDate)
+    private val _startDateString = MutableLiveData(Utils.convertDateToString(fullCurrentDate))
+    private val _endDate = MutableLiveData(fullCurrentDate.plusDays(1))
+    private val _endDateString = MutableLiveData(Utils.convertDateToString(fullCurrentDate.plusDays(1)))
+    private val _startTime = MutableLiveData(fullCurrentDate.plusHours(1))
+    private val _startTimeString = MutableLiveData(Utils.convertTimeToString(fullCurrentDate.plusHours(1)))
+    private val _endTime = MutableLiveData(fullCurrentDate.plusHours(2))
+    private val _endTimeString = MutableLiveData(Utils.convertTimeToString(fullCurrentDate.plusHours(2)))
+    private val _timeBeforeEvent = MutableLiveData(ValueBeforeEvent.MINUTES_BEFORE.string)
+    private val _valueBeforeEvent = MutableLiveData(20)
     private val _eventColor = MutableLiveData(-1544140)
+    private val _isRepeating = MutableLiveData(false)
 
-    val startDate : LiveData<String> = _startDate
-    val endDate : LiveData<String> = _endDate
-    val startTime : LiveData<String> = _startTime
-    val endTime : LiveData<String> = _endTime
-    val beforeEvent : LiveData<String> = _beforeEvent
+    val title : LiveData<String> = _title
+    val startDate : LiveData<DateTime> = _startDate
+    val startDateString : LiveData<String> = _startDateString
+    val endDate : LiveData<DateTime> = _endDate
+    val endDateString : LiveData<String> = _endDateString
+    val startTime : LiveData<DateTime> = _startTime
+    val startTimeString : LiveData<String> = _startTimeString
+    val endTime : LiveData<DateTime> = _endTime
+    val endTimeString : LiveData<String> = _endTimeString
+    val beforeEvent : LiveData<String> = _timeBeforeEvent
     val valueBeforeEvent : LiveData<Int> = _valueBeforeEvent
-    val selectedDate: LiveData<String> = _selectedDate
+    val selectedDate: LiveData<DateTime> = _selectedDate
     val eventColor: LiveData<Int> = _eventColor
+    val isRepeating : LiveData<Boolean> = _isRepeating
+    val isEditMode : LiveData<Boolean> = _isEditMode
 
-//    // Set the current date in LiveData
-    fun onReminderAdd(date : String){
-        // Build a Date object
-//        val date = GregorianCalendar(year, month - 1, dayOfMonth).time
-//        setDateForReminder(date)
-        _selectedDate.value = date
+
+    fun onReminderAddClicked(date: DateTime?){
+        _startDate.value = date
+        _endDate.value = date?.plusDays(1)
+        Utils.convertDateToString(date).let { _startDateString.value = it}
+        Utils.convertDateToString(date?.plusDays(1)).let { _endDateString.value = it}
     }
 
-//    fun setDateForReminder(date : String){
-//        _selectedDate.value = date
-//    }
+    fun setTitle(title : String){ _title.value = title }
 
-
-
-    fun setStartDate(startDate : String){
+    fun setStartDate(startDate : DateTime){
         _startDate.value = startDate
+        Utils.convertDateToString(startDate).let { _startDateString.value = it}
     }
 
-    fun setEndDate(endDate : String){
+    fun setEndDate(endDate : DateTime){
         _endDate.value = endDate
+        Utils.convertDateToString(endDate).let { _endDateString.value = it}
     }
 
-    fun setStartTime(startTime : String){
+    fun setStartTime(startTime : DateTime){
         _startTime.value = startTime
-//        verifyTiming()
+        Utils.convertTimeToString(startTime).let { _startTimeString.value = it}
     }
 
-    fun setEndTime(endTime : String){
+    fun setEndTime(endTime : DateTime){
         _endTime.value = endTime
+        Utils.convertTimeToString(endTime).let { _endTimeString.value = it}
     }
 
-    fun setBeforeEvent(beforeEvent : String){
-        _beforeEvent.value = beforeEvent
+    fun setTimeBeforeEvent(timeBeforeEvent : String){
+        _timeBeforeEvent.value = timeBeforeEvent
     }
 
     fun setValueBeforeEvent(valueBeforeEvent : Int){
@@ -133,56 +144,104 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
         _eventColor.value = eventColor
     }
 
+    fun setIsRepeating(isRepeating: Boolean){
+        _isRepeating.value = isRepeating
+    }
+
+    fun setReminderToEdit(position : Int){
+        reminderPosition = position
+    }
+
+    fun setIsEditMode(isEditMode : Boolean){
+        Log.d("isEditMode1", "Received $isEditMode")
+        _isEditMode.value = isEditMode
+    }
+
+    //Helper expressions
     private fun toastMessage(message : String) = Toast.makeText(app, message, Toast.LENGTH_LONG).show()
-    private fun verifyDates(dateStart : Date, dateEnd : Date) = dateEnd >= dateStart
-    private fun verifyDateBig(dateStart : Date, dateEnd : Date) = dateEnd > dateStart
-    private fun verifyTimes(timeStart : Date, timeEnd : Date) = timeEnd > timeStart
-    // Functions to transform String to Date()
-    private fun dateStart() = _startDate.value?.let { Utils.stringToDate(it) }
-    private fun dateEnd() = _endDate.value?.let { Utils.stringToDate(it) }
-    private fun timeStart() = _startTime.value?.let { Utils.stringToTime(it) }
-    private fun timeEnd() = _endTime.value?.let { Utils.stringToTime(it) }
+    private fun increaseDateDays(receivedDate: DateTime, value : Int) = receivedDate.plusDays(value)
+    private fun increaseTimeHours(receivedTime: DateTime, value : Int) = receivedTime.plusHours(value)
+    private fun decreaseDateDays(receivedDate: DateTime, value : Int) = receivedDate.minusDays(value)
+    private fun decreaseDateMonths(receivedDate: DateTime, value : Int) = receivedDate.minusMonths(value)
+    private fun decreaseDateYear(receivedDate: DateTime, value : Int) = receivedDate.minusYears(value)
+    private fun decreaseTimeHours(receivedTime: DateTime, value : Int) = receivedTime.minusHours(value)
+    private fun decreaseTimeMinutes(receivedTime: DateTime, value : Int) = receivedTime.minusMinutes(value)
 
 
-    fun setDates(receivedDate : Date, isStart : Boolean) {
-        if(isStart){
-            when (verifyDates(receivedDate, dateEnd()!!)) {
-                true -> _startDate.value = Utils.dateToString(receivedDate)
-                else -> toastMessage("End-Date cannot be earlier than Start-Date")
+    /****************************
+     * Date & Time pickers
+     ****************************/
+
+    fun pickStartDate(receivedDate : DateTime){
+        when (_endDate.value!!.toLocalDate() >= receivedDate.toLocalDate()) {
+            true -> setStartDate(receivedDate) // to updates both values (String + dateTime)
+            else -> handleDateValues(receivedDate)
+        }
+    }
+
+    private fun handleDateValues(receivedDate: DateTime){
+        setStartDate(receivedDate)
+        setEndDate(increaseDateDays(receivedDate, 1))
+    }
+
+    fun pickEndDate(receivedDate : DateTime){
+        println("Test XXX ${receivedDate.toLocalDate()} + ${_startDate.value!!.toLocalDate()}")
+        when {
+            receivedDate.toLocalDate() > _startDate.value!!.toLocalDate() -> {
+                setEndDate(receivedDate) // updates both values (String + dateTime)
             }
-        }else{ // end-date view
-            when (verifyDates(dateStart()!! , receivedDate)) {
-                true -> _endDate.value = Utils.dateToString(receivedDate)
-                else -> toastMessage("End-Date cannot be earlier than Start-Date")
+            receivedDate.toLocalDate() == _startDate.value!!.toLocalDate() -> {
+                setEndDate(receivedDate)
+                handleTimeValues(_startTime.value!!) // Fix Dates if needed
+            }
+            else -> { toastMessage("End-Date cannot be earlier than Start-Date") }
+        }
+    }
+
+    fun pickStartTime(receivedTime : DateTime){
+        if(_endDate.value!! > _startDate.value!!){
+            setStartTime(receivedTime)  // in this case, any hour can be selected
+        }else{ // Dates are equal
+            when(receivedTime < _endTime.value ){
+                true -> setStartTime(receivedTime)
+                else -> handleTimeValues(receivedTime)
             }
         }
     }
 
-    fun setTimes(receivedTime : Date , isStart : Boolean){
-        // If end-date is bigger than start-Date, allow any hour selection
-        if(verifyDateBig(dateStart()!!, dateEnd()!!)) {
-            when(isStart){
-                true -> _startTime.value = Utils.timeToString(receivedTime)
-                else -> _endTime.value = Utils.timeToString(receivedTime)
-            }
-        }else{ // Else, (same day)  make sure that start-time isn't bigger than end-time
-            if(isStart && verifyTimes(receivedTime, timeEnd()!!)){
-                _startTime.value = Utils.timeToString(receivedTime)
-            }else if (!isStart && verifyTimes(timeStart()!!, receivedTime)){
-                _endTime.value = Utils.timeToString(receivedTime)
-            }else{
-                toastMessage("Start-Time cannot be later than End-Time")
+    fun pickEndTime(receivedTime: DateTime){
+        if(_endDate.value!! > _startDate.value!!){
+            setEndTime(receivedTime)  // in this case, any hour can be selected
+        }else{ // Dates are equal
+            when(_startTime.value!! < receivedTime ){
+                true -> setEndTime(receivedTime)
+                else -> toastMessage("End-Time cannot be earlier than Start-Time")
             }
         }
     }
 
+    private fun handleTimeValues(receivedTime: DateTime){
+        setStartTime(receivedTime)
+        setEndTime(increaseTimeHours(receivedTime, 1))
+    }
 
-    /**
-     *  Alarm creator
-     */
+    fun updateUiVariablesForEditMode(){
+        setTitle(allReminders.value?.get(reminderPosition)!!.title)
+    }
 
-    fun oneTimeAlarmIntent(isRepeating : Boolean, id : Int, day : Int, month : Int, year : Int, hour : Int, minutes : Int){
-        if(!isRepeating){
+    fun resetUiElements(){
+        setIsEditMode(false)
+        setReminderToEdit(-1)
+        setTitle("")
+        // TODO: add all the rest ...
+    }
+
+
+    /****************************
+     * Alarm Configurations
+     ****************************/
+
+    private fun oneTimeAlarmIntent(id : Int, day : Int, month : Int, year : Int, hour : Int, minutes : Int){
             Log.d("AlarmIntent - One Time", "Received")
             // Create intent
             val alarmIntent = Intent(app, AlarmReceiver::class.java).let { intent ->
@@ -191,7 +250,7 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
             // Set the alarm to start at Date&Time.
             val calendar: Calendar = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
-                set(2020, 3, 21, 10, minutes,0) // April: months (0-11)
+                set(year, (month-1), day, hour, minutes,minutes) // *** Months (0-11)
             }
 
             alarmMgr?.set(
@@ -199,7 +258,6 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
                 calendar.timeInMillis,
                 alarmIntent
             )
-        }
     }
 
     fun repeatingAlarmIntent(isRepeating : Boolean, id : Int){
@@ -231,6 +289,69 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
         alarmMgr?.cancel(alarmIntent)
 
     }
+
+    /****************************
+     * Execute Saving actions
+     ****************************/
+
+    fun manageSavingAction(receivedTitle : String, address : String){
+        createObjectForReminder(receivedTitle, address) // Create Reminder object
+        // Set a date value
+        var fullEventDate = Utils.convertStringToDateTime(
+            "${startDate.value!!.year}-" +
+                    "${startDate.value!!.monthOfYear}-" +
+                    "${startDate.value!!.dayOfMonth} " +
+                    "${startTime.value!!.hourOfDay}:" +
+                    "${startTime.value!!.minuteOfHour}")
+        println("fullDate XXX ${fullEventDate.toString()}")
+
+//         configure alarm time
+        when (_timeBeforeEvent.value){
+            "minute(s)" -> fullEventDate = fullEventDate!!.minusMinutes(_valueBeforeEvent.value!!)
+            "hour(s)" -> fullEventDate = fullEventDate!!.minusHours(_valueBeforeEvent.value!!)
+            "day(s)" -> fullEventDate = fullEventDate!!.minusDays(_valueBeforeEvent.value!!)
+        }
+        if(!isRepeating.value!!){ // Not repeating -> One time alert
+            oneTimeAlarmIntent(
+                1, // TODO: Solve ID - To be managed automatically
+                fullEventDate!!.dayOfMonth,
+                fullEventDate.monthOfYear,
+                fullEventDate.year,
+                fullEventDate.hourOfDay,
+                fullEventDate.minuteOfHour)
+            println("fullDate XXX2 ${fullEventDate.toString()}")
+        }
+    }
+
+    private fun createObjectForReminder(receivedTitle : String, address : String){
+        reminder = Reminder(receivedTitle)
+        with(reminder){
+
+            content = "content bb tt" // To change
+            eventColor = _eventColor.value!!
+            creationDate = fullCurrentDate.toString()
+            startTime = _startTimeString.value
+            endTime = _endTimeString.value
+            startDate = _startDateString.value
+            endDate = _endDateString.value
+            alarmDate = "25/05/2020" // To change
+            alarmTime = "10:00" // To change
+            eventAddress = address
+            repeatTimes = 3 // To change
+            isRepeating = true // To change
+            isActive = true // To change
+        }
+        insert(reminder)
+    }
+
+    /****************************
+     * Helpers
+     ****************************/
+
+    // minute = 60sec * 1000millis
+    // hour = minute * 60
+    // day = hour * 24
+    // week = day * 7
 
 //    fun alarmDateInstance(day : Int, month : Int, year : Int, hour : Int, minutes : Int) : Calendar{
 //        // Set the alarm to start at 8:30 a.m.
@@ -273,5 +394,6 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
         LIGHT_ORANGE(0xF9CB9C),
         LIGHT_RED(0xE06666)
     }
+
 
 }

@@ -2,25 +2,26 @@ package com.elbaz.eliran.rappeltout.ui.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CalendarView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.databinding.FragmentCalendarBinding
-import com.elbaz.eliran.rappeltout.ui.activities.MainActivity
+import com.elbaz.eliran.rappeltout.events.EditFragmentEvent
 import com.elbaz.eliran.rappeltout.ui.adapters.ReminderListAdapter
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
+import com.elbaz.eliran.rappeltout.utils.ItemClickSupport
+import com.elbaz.eliran.rappeltout.utils.Utils
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_calendar.*
-import kotlinx.android.synthetic.main.fragment_edit_reminder.*
+import org.greenrobot.eventbus.EventBus
 
 class CalendarFragment : Fragment() {
 
@@ -52,6 +53,7 @@ class CalendarFragment : Fragment() {
 
         calendarConfig(view)
         recyclerViewConfig()
+        configureOnClickRecyclerView()
         setDatabaseObserver()
     }
 
@@ -62,12 +64,11 @@ class CalendarFragment : Fragment() {
         calendarView?.setOnDateChangeListener { view, year, month, dayOfMonth ->
             // months are indexed from 0. So, 0 means January, 1 means february etc.
             val date = "$dayOfMonth/${(month + 1)}/$year"
-//            viewModel.onReminderAdd(dayOfMonth, month+1, year)
-            viewModel.onReminderAdd(date)
+            Utils.convertStringToDate(date)?.let { viewModel.onReminderAddClicked(it) }
         }
     }
 
-    fun recyclerViewConfig(){
+    private fun recyclerViewConfig(){
         val recyclerView = requireActivity().findViewById<RecyclerView>(R.id.recyclerview)
         // OR recyclerView.***  ?
         val adapter = ReminderListAdapter(requireContext())
@@ -81,7 +82,20 @@ class CalendarFragment : Fragment() {
         })
     }
 
-    fun setDatabaseObserver(){
+    //  Configure item click on RecyclerView
+    private fun configureOnClickRecyclerView() {
+        ItemClickSupport.addTo(recyclerview, R.layout.fragment_calendar)
+            .setOnItemClickListener { recyclerView, position, v ->
+                // RecyclerView onClick action
+                println("XXX onCLick ${viewModel.allReminders.value!![position].title}")
+                viewModel.setReminderToEdit(position) // Set the current position in viewModel
+                // TODO : Load the fragment with the current reminder data from database
+                viewModel.setIsEditMode(true) // Set Fragment to EditMode
+                EventBus.getDefault().post(EditFragmentEvent()) // Event to inflate the fragment
+            }
+    }
+
+    private fun setDatabaseObserver(){
 
     }
 }

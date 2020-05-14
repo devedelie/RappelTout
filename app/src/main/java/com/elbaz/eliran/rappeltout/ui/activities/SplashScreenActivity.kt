@@ -10,6 +10,7 @@ import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import net.danlew.android.joda.JodaTimeAndroid
 
 open class SplashScreenActivity : AppCompatActivity() {
 
@@ -17,7 +18,7 @@ open class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
-
+        JodaTimeAndroid.init(this)  // Initialize JudaTime
     }
 
     override fun onResume() {

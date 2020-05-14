@@ -13,15 +13,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.databinding.ActivityMainBinding
 import com.elbaz.eliran.rappeltout.events.BackBtnPressEvent
+import com.elbaz.eliran.rappeltout.events.EditFragmentEvent
 import com.elbaz.eliran.rappeltout.ui.fragments.CalendarFragment
 import com.elbaz.eliran.rappeltout.ui.fragments.EditReminderFragment
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
+import com.elbaz.eliran.rappeltout.utils.Utils
 import com.firebase.ui.auth.AuthUI
-import io.opencensus.trace.MessageEvent
-import kotlinx.android.synthetic.main.fragment_calendar.*
+import kotlinx.android.synthetic.main.activity_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
+
+        Utils.initDateFormat() // Initialize Format
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,12 +52,14 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.mainViewModel = viewModel
 
-//        setSupportActionBar(toolbar)
+        setSupportActionBar(toolbar)
 
         // Load calendar fragment as default
         supportFragmentManager.beginTransaction()
             .add(R.id.host_fragment, calendarFragment)
             .commit()
+
+        Test()
 
 //        start("second")
     }
@@ -63,18 +70,28 @@ class MainActivity : AppCompatActivity() {
         loadFragment(calendarFragment)
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEditFragmentMode(event: EditFragmentEvent?) { /* Do something */
+        println("XXX editReminderFragment event happened")
+        loadFragment(editReminderFragment)
+    }
+
     fun onFloatingBtnClicked(view: View){
             loadFragment(editReminderFragment)
     }
 
     private fun loadFragment(fragment: Fragment){
-        when (fragment){
-            editReminderFragment -> binding.floatingBtn.hide()
-            calendarFragment -> binding.floatingBtn.show()
-        }
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.host_fragment, fragment)
         fragmentTransaction.commit()
+        // Show/Hide view elements
+        if (fragment == editReminderFragment){
+            binding.floatingBtn.hide()
+            supportActionBar!!.hide()
+        }else if(fragment == calendarFragment){
+            binding.floatingBtn.show()
+            supportActionBar!!.show()
+        }
     }
 
 
@@ -84,15 +101,13 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        return when (item.itemId) {
-//            R.id.action_settings -> true
-//            else -> super.onOptionsItemSelected(item)
-//        }
-//    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
 
 
@@ -134,6 +149,31 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    fun Test(){
+        //---------TEST---------
+//        var timeZone = DateTimeZone.forID("Europe/Paris")
+//        var fullAlarmDate = DateTime.now(timeZone) // Instead of DateTimeZone.UTC
+//        println("XXX $fullAlarmDate")
+//        println("XXX $fullAlarmDate.")
+//        println("XXX ${fullAlarmDate.dayOfMonth}")
+//        println("XXX ${fullAlarmDate.year}")
+//        println("XXX ${fullAlarmDate.monthOfYear}")
+//        println("XXX ${fullAlarmDate.hourOfDay}")
+//        println("XXX ${fullAlarmDate.minuteOfHour}")
+//        println("XXX ${fullAlarmDate.toDateTime()}")
+//        println("XXX ${fullAlarmDate.toLocalDate()}")
+//        println("XXXX ${Utils.formatDate(fullAlarmDate)}")
+//        println("XXX ${fullAlarmDate.toLocalTime()}")
+//        println("XXXX ${Utils.formatTime(fullAlarmDate)}")
+//
+//        println("XXXYY ${Utils.convertStringToDate( "12/05/2020")}")
+////        println("XXXYY ${Utils.convertStringToDate( "18:00")}")
+//
+//        println("XXX ${Utils.getCurrentDateTimeString(true)}")
+//        println("XXX ${Utils.subtractDate((Utils.convertStringToDateTime(true, DateTime.now().toString()))!!, "days", 4)}")
+        // --------END----------
     }
 
 }
