@@ -209,6 +209,6 @@ class EditReminderFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         Log.d("XXXCHECK onDetach", "Received")
-        viewModel.resetUiElements()
+        viewModel.resetToDefaultValues()
     }
 }

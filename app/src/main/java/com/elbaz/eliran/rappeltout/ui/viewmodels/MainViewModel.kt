@@ -65,26 +65,26 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
     /****************************
      * DATA
      ****************************/
-    
+
     private lateinit var reminder : Reminder
     private var reminderPosition : Int = -1
     private val _isEditMode = MutableLiveData(false)
 
     // Configure MutableLiveDate with default values
-    private val _title = MutableLiveData("")
-    private val _selectedDate = MutableLiveData(fullCurrentDate) // As default: current date
-    private val _startDate = MutableLiveData(fullCurrentDate)
-    private val _startDateString = MutableLiveData(Utils.convertDateToString(fullCurrentDate))
-    private val _endDate = MutableLiveData(fullCurrentDate.plusDays(1))
-    private val _endDateString = MutableLiveData(Utils.convertDateToString(fullCurrentDate.plusDays(1)))
-    private val _startTime = MutableLiveData(fullCurrentDate.plusHours(1))
-    private val _startTimeString = MutableLiveData(Utils.convertTimeToString(fullCurrentDate.plusHours(1)))
-    private val _endTime = MutableLiveData(fullCurrentDate.plusHours(2))
-    private val _endTimeString = MutableLiveData(Utils.convertTimeToString(fullCurrentDate.plusHours(2)))
-    private val _timeBeforeEvent = MutableLiveData(ValueBeforeEvent.MINUTES_BEFORE.string)
-    private val _valueBeforeEvent = MutableLiveData(20)
-    private val _eventColor = MutableLiveData(-1544140)
-    private val _isRepeating = MutableLiveData(false)
+    private var _title = MutableLiveData("")
+    private var _selectedDate = MutableLiveData(fullCurrentDate) // As default: current date
+    private var _startDate = MutableLiveData(fullCurrentDate)
+    private var _startDateString = MutableLiveData(Utils.convertDateToString(fullCurrentDate))
+    private var _endDate = MutableLiveData(fullCurrentDate.plusDays(1))
+    private var _endDateString = MutableLiveData(Utils.convertDateToString(fullCurrentDate.plusDays(1)))
+    private var _startTime = MutableLiveData(fullCurrentDate.plusHours(1))
+    private var _startTimeString = MutableLiveData(Utils.convertTimeToString(fullCurrentDate.plusHours(1)))
+    private var _endTime = MutableLiveData(fullCurrentDate.plusHours(2))
+    private var _endTimeString = MutableLiveData(Utils.convertTimeToString(fullCurrentDate.plusHours(2)))
+    private var _timeBeforeEvent = MutableLiveData(ValueBeforeEvent.MINUTES_BEFORE.string)
+    private var _valueBeforeEvent = MutableLiveData(20)
+    private var _eventColor = MutableLiveData(-1544140)
+    private var _isRepeating = MutableLiveData(false)
 
     val title : LiveData<String> = _title
     val startDate : LiveData<DateTime> = _startDate
@@ -109,6 +109,10 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
         Utils.convertDateToString(date).let { _startDateString.value = it}
         Utils.convertDateToString(date?.plusDays(1)).let { _endDateString.value = it}
     }
+
+    /****************************
+     * Setters
+     ****************************/
 
     fun setTitle(title : String){ _title.value = title }
 
@@ -227,13 +231,31 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
 
     fun updateUiVariablesForEditMode(){
         setTitle(allReminders.value?.get(reminderPosition)!!.title)
+        // TODO: update all UI elements with data from current Reminder
     }
 
-    fun resetUiElements(){
+
+    fun resetToDefaultValues(){
+        setTitle("")
+//        _selectedDate = MutableLiveData(fullCurrentDate) // As default: current date
+        setStartDate(fullCurrentDate)
+        setEndDate(fullCurrentDate.plusDays(1))
+        setStartTime(fullCurrentDate.plusHours(1))
+        setEndTime(fullCurrentDate.plusHours(2))
+        setTimeBeforeEvent(ValueBeforeEvent.MINUTES_BEFORE.string)
+        setValueBeforeEvent(20)
+        setEventColor(-1544140)
+        setIsRepeating(false)
         setIsEditMode(false)
         setReminderToEdit(-1)
-        setTitle("")
-        // TODO: add all the rest ...
+    }
+
+    fun cancelAlarmBtnVisibility() : String{
+        return when (_isEditMode.value!!){
+            true -> "visible"
+            else -> "gone"
+        }
+
     }
 
 
