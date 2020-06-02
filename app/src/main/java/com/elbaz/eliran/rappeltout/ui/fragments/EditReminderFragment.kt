@@ -186,25 +186,6 @@ class EditReminderFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("XXXCHECK onPause", "Received")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("XXXCHECK onStop", "Received")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("XXXCHECK onDestroyView", "Received")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("XXXCHECK onDestroy", "Received")
-    }
 
     override fun onDetach() {
         super.onDetach()
