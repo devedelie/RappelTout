@@ -52,17 +52,17 @@ class LoginActivity : AppCompatActivity() {
 
     fun gmailSignIn(view: View) {
         // Create and launch sign-in intent
-        Toast.makeText(this, "This action was not implemented", Toast.LENGTH_LONG).show()
-//        startActivityForResult(
-//            AuthUI.getInstance()
-//                .createSignInIntentBuilder()
-//                .setTheme(R.style.LoginTheme)
-//                .setAvailableProviders(
-//                    arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()))
-//                .setIsSmartLockEnabled(false, true)
-//                .setLogo(R.drawable.fui_ic_anonymous_white_24dp)
-//                .build(),
-//            RC_SIGN_IN)
+//        Toast.makeText(this, "This action was not implemented", Toast.LENGTH_LONG).show()
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setTheme(R.style.LoginTheme)
+                .setAvailableProviders(
+                    arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()))
+                .setIsSmartLockEnabled(false, true)
+                .setLogo(R.drawable.fui_ic_anonymous_white_24dp)
+                .build(),
+            RC_SIGN_IN)
     }
 
     fun facebookSignIn(view: View) {
