@@ -45,7 +45,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
 
         // DataBinding
         binding  = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -59,9 +58,6 @@ class MainActivity : AppCompatActivity() {
             .add(R.id.host_fragment, calendarFragment)
             .commit()
 
-        Test()
-
-//        start("second")
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -109,12 +105,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-    /////////////////////////////////////
-    // Try to refactor all non-UI methods into viewModel class to keep UI logic only
-    // using DataBinding
-
     fun logout(item: MenuItem){
         AuthUI.getInstance()
             .signOut(this)
@@ -131,49 +121,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    //////////////// TODO: Test
-    private val instructions : Map<String, () -> Unit> = mapOf(
-        "first" to {Toast.makeText(this, "First", Toast.LENGTH_LONG).show()},
-        "second" to {Toast.makeText(this, "Second", Toast.LENGTH_LONG).show()}
-    )
-
-    var someMethod: (() -> Unit)? = null
-
-    fun start(word : String){
-        someMethod?.invoke()
-        instructions[word]?.invoke()
-    }
-
-    /////////////// TODO: End of Test
-
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
 
-    fun Test(){
-        //---------TEST---------
-//        var timeZone = DateTimeZone.forID("Europe/Paris")
-//        var fullAlarmDate = DateTime.now(timeZone) // Instead of DateTimeZone.UTC
-//        println("XXX $fullAlarmDate")
-//        println("XXX $fullAlarmDate.")
-//        println("XXX ${fullAlarmDate.dayOfMonth}")
-//        println("XXX ${fullAlarmDate.year}")
-//        println("XXX ${fullAlarmDate.monthOfYear}")
-//        println("XXX ${fullAlarmDate.hourOfDay}")
-//        println("XXX ${fullAlarmDate.minuteOfHour}")
-//        println("XXX ${fullAlarmDate.toDateTime()}")
-//        println("XXX ${fullAlarmDate.toLocalDate()}")
-//        println("XXXX ${Utils.formatDate(fullAlarmDate)}")
-//        println("XXX ${fullAlarmDate.toLocalTime()}")
-//        println("XXXX ${Utils.formatTime(fullAlarmDate)}")
-//
-//        println("XXXYY ${Utils.convertStringToDate( "12/05/2020")}")
-////        println("XXXYY ${Utils.convertStringToDate( "18:00")}")
-//
-//        println("XXX ${Utils.getCurrentDateTimeString(true)}")
-//        println("XXX ${Utils.subtractDate((Utils.convertStringToDateTime(true, DateTime.now().toString()))!!, "days", 4)}")
-        // --------END----------
-    }
 
 }
