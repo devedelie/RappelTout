@@ -22,6 +22,11 @@ class DisplayReminderActivity : AppCompatActivity() , TextToSpeech.OnInitListene
 //    private val viewModel by lazy { ViewModelProviders.of(this).get(ReminderViewModel::class.java) }
 
 
+
+    // TODO : TEST ACTIVITY ******
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_display_reminder)
@@ -29,7 +34,7 @@ class DisplayReminderActivity : AppCompatActivity() , TextToSpeech.OnInitListene
         speakConfig()
     }
 
-    fun speakConfig(){
+    private fun speakConfig(){
         buttonSpeak = this.button_speak
         editText = this.edittext_input
 
