@@ -41,11 +41,11 @@ open class SplashScreenActivity : AppCompatActivity() {
     // --------------------
     // UTILS
     // --------------------
-    protected fun isCurrentUserLogged(): Boolean? {
+    private fun isCurrentUserLogged(): Boolean? {
         return this.getCurrentUser() != null
     }
 
-    protected fun getCurrentUser(): FirebaseUser? {
+    private fun getCurrentUser(): FirebaseUser? {
         return FirebaseAuth.getInstance().currentUser
     }
 
@@ -57,7 +57,7 @@ open class SplashScreenActivity : AppCompatActivity() {
     // --------------------
     // NETWORK CONNECTIVITY
     // --------------------
-    fun displayMobileDataSettingsDialog(activity: Activity?, context: Context): AlertDialog? {
+    private fun displayMobileDataSettingsDialog(activity: Activity?, context: Context): AlertDialog? {
         val builder = AlertDialog.Builder(context)
         builder.setTitle("No Internet")
         builder.setMessage("Please enable network access")
