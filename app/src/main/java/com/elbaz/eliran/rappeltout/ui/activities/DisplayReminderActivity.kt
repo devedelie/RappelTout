@@ -6,12 +6,9 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import androidx.lifecycle.ViewModelProviders
 import com.elbaz.eliran.rappeltout.R
 
-import com.elbaz.eliran.rappeltout.ui.viewmodels.SetReminderViewModel
 import kotlinx.android.synthetic.main.activity_display_reminder.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class DisplayReminderActivity : AppCompatActivity() , TextToSpeech.OnInitListener{
