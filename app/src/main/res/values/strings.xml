@@ -32,5 +32,6 @@
     <string name="repeat">Repeat</string>
     <string name="notes">Notes</string>
     <string name="fus_hor">Fus .hor.</string>
+    <string name="button">Button</string>
 
 </resources>
