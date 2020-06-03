@@ -349,7 +349,7 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
         reminder = Reminder(receivedTitle)
         with(reminder){
 
-            content = "content bb tt" // To change
+            content = "content comes here" // To change
             eventColor = _eventColor.value!!
             creationDate = fullCurrentDate.toString()
             startTime = _startTimeString.value
