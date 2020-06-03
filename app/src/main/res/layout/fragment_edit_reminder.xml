@@ -276,6 +276,7 @@
             android:layout_height="wrap_content"
             android:text="Cancel Alarm"
             android:layout_gravity="center"
+            android:visibility="gone"
             android:onClick="@{() -> mainViewModel.cancelAlarmWithId(1)}"/>
     </LinearLayout>
 </layout>
