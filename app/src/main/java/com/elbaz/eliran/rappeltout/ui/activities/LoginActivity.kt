@@ -114,6 +114,11 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun invokePrivacyPolicy(view: View) {
+        val intent = Intent (this@LoginActivity, PrivacyPolicyActivity::class.java)
+        startActivity(intent)
+    }
+
     // --------------------
     // UI
     // --------------------
@@ -122,5 +127,7 @@ class LoginActivity : AppCompatActivity() {
     private fun showSnackBar(coordinatorLayout: CoordinatorLayout, message: String) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show()
     }
+
+
 
 }
