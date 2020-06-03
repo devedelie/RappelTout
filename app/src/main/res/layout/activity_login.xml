@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/login_title"
                 android:textSize="35sp"
-                android:textColor="@color/colorPrimaryDark" />
+                android:textColor="@color/colorSplashBackground" />
 
 
             <!-- BUTTONS CONTAINER -->
@@ -52,7 +52,7 @@
                     app:cardCornerRadius="@dimen/login_btn_radius"
                     android:onClick="emailSignIn"
                     android:layout_marginBottom="@dimen/default_buttons_margin_bottom"
-                    app:cardBackgroundColor="@color/colorPrimaryDark">
+                    app:cardBackgroundColor="@color/colorSplashBackground">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                     app:cardCornerRadius="@dimen/login_btn_radius"
                     android:onClick="gmailSignIn"
                     android:layout_marginBottom="@dimen/default_buttons_margin_bottom"
-                    app:cardBackgroundColor="@color/colorPrimaryDark">
+                    app:cardBackgroundColor="@color/colorSplashBackground">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -122,7 +122,7 @@
                     app:cardCornerRadius="@dimen/login_btn_radius"
                     android:onClick="facebookSignIn"
                     android:layout_marginBottom="@dimen/default_buttons_margin_bottom"
-                    app:cardBackgroundColor="@color/colorPrimaryDark">
+                    app:cardBackgroundColor="@color/colorSplashBackground">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
