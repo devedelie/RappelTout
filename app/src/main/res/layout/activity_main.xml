@@ -38,7 +38,10 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorComplimentary"
+                android:backgroundTint="#80FFFFFF"
+                android:backgroundTintMode="src_over"/>
 
             <FrameLayout
                 android:id="@+id/host_fragment"
