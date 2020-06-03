@@ -18,7 +18,7 @@
             android:id="@+id/splash_screen_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/fui_ic_anonymous_white_24dp"
+            android:src="@drawable/ic_access_alarm_white_78dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
 
@@ -40,7 +40,7 @@
                 android:id="@+id/loading_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loading..."
+                android:text="@string/loading"
                 android:layout_gravity="center"
                 android:layout_below="@+id/splash_screen_loading_animation"
                 android:layout_centerHorizontal="true"

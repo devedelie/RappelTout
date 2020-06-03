@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="RappelTout"
+                android:text="@string/login_title"
                 android:textSize="35sp"
                 android:textColor="@color/colorPrimaryDark" />
 
@@ -47,9 +47,9 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/provider_login_button_email"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    app:cardMaxElevation="5dp"
-                    app:cardCornerRadius="15dp"
+                    android:layout_height="@dimen/login_btn_height"
+                    app:cardMaxElevation="@dimen/login_btn_elevation"
+                    app:cardCornerRadius="@dimen/login_btn_radius"
                     android:onClick="emailSignIn"
                     android:layout_marginBottom="@dimen/default_buttons_margin_bottom"
                     app:cardBackgroundColor="@color/colorPrimaryDark">
@@ -82,9 +82,9 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/provider_login_button_gmail"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    app:cardMaxElevation="5dp"
-                    app:cardCornerRadius="15dp"
+                    android:layout_height="@dimen/login_btn_height"
+                    app:cardMaxElevation="@dimen/login_btn_elevation"
+                    app:cardCornerRadius="@dimen/login_btn_radius"
                     android:onClick="gmailSignIn"
                     android:layout_marginBottom="@dimen/default_buttons_margin_bottom"
                     app:cardBackgroundColor="@color/colorPrimaryDark">
@@ -117,9 +117,9 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/provider_login_button_facebook"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    app:cardMaxElevation="5dp"
-                    app:cardCornerRadius="15dp"
+                    android:layout_height="@dimen/login_btn_height"
+                    app:cardMaxElevation="@dimen/login_btn_elevation"
+                    app:cardCornerRadius="@dimen/login_btn_radius"
                     android:onClick="facebookSignIn"
                     android:layout_marginBottom="@dimen/default_buttons_margin_bottom"
                     app:cardBackgroundColor="@color/colorPrimaryDark">

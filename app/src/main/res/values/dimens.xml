@@ -5,7 +5,7 @@
     <dimen name="default_title_size">20sp</dimen>
     <dimen name="default_text_size">16sp</dimen>
     <dimen name="default_text_size_mini">8sp</dimen>
-    <dimen name="default_buttons_margin_bottom">12sp</dimen>
+
     <dimen name="loading_animation_text_size">20sp</dimen>
 
     <dimen name="text_title">22sp</dimen>
@@ -16,4 +16,11 @@
     <dimen name="starIcon_bottomsheet">18dp</dimen>
 
     <dimen name="text_field_margin_start_end">25dp</dimen>
+
+    <!-- Login buttons -->
+    <dimen name="login_btn_height">40sp</dimen>
+    <dimen name="login_btn_radius">15sp</dimen>
+    <dimen name="login_btn_elevation">5sp</dimen>
+    <dimen name="default_buttons_margin_bottom">12sp</dimen>
+
 </resources>
