@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     lateinit var coordinatorLayout: CoordinatorLayout
+    lateinit var buttonsContainer: LinearLayout
     // For Data
     companion object {
         private const val RC_SIGN_IN: Int = 100
@@ -29,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
 
         coordinatorLayout = findViewById(R.id.login_coordinator_layout)
 
+        buttonsContainer = findViewById(R.id.provider_login_all_login_buttons_layout)
     }
 
     //--------------------
@@ -111,6 +114,8 @@ class LoginActivity : AppCompatActivity() {
         val user = FirebaseAuth.getInstance().currentUser
         showSnackBar(coordinatorLayout, getString(R.string.connection_succeed))
         val intent = Intent (this@LoginActivity, MainActivity::class.java)
+        intent.flags =
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
     }
 
@@ -120,14 +125,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     // --------------------
-    // UI
+    // UI & Animations
     // --------------------
 
     // Show Snack Bar with a message
     private fun showSnackBar(coordinatorLayout: CoordinatorLayout, message: String) {
         Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_SHORT).show()
     }
-
-
-
 }
