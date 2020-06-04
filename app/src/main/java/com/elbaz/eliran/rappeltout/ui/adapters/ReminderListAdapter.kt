@@ -4,7 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.model.Reminder
@@ -24,6 +27,7 @@ class ReminderListAdapter internal constructor(
         val contentView: TextView = itemView.findViewById(R.id.item_content_text)
         val startTime: TextView = itemView.findViewById(R.id.start_time)
         val endTime: TextView = itemView.findViewById(R.id.end_time)
+        val bellIcon: ImageView = itemView.findViewById(R.id.item_bell_icon)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
@@ -37,6 +41,11 @@ class ReminderListAdapter internal constructor(
         holder.contentView.text = current.content
         holder.startTime.text = current.startTime
         holder.endTime.text = current.endTime
+        println("current is active? ${current.isActive!!}")
+        when (current.isActive!!) {
+        true -> holder.bellIcon.visibility = View.VISIBLE
+        else -> holder.bellIcon.visibility = View.INVISIBLE
+        }
     }
 
     internal fun setReminder(reminders : List<Reminder>){

@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.activities.MainActivity">
+        tools:context=".ui.activities.MainActivity"
+        android:background="@drawable/ic_background"
+        android:backgroundTint="#80FFFFFF"
+        android:backgroundTintMode="src_over">
 
         <!--Import of TopBar-->
         <include
