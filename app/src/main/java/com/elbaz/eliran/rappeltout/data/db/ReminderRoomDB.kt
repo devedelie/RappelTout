@@ -63,7 +63,7 @@ abstract class ReminderRoomDB : RoomDatabase() {
         }
 
         suspend fun populateDatabase(reminderDao: ReminderDAO, @NonNull db : SupportSQLiteDatabase) {
-            // Delete all content here.
+            // Delete all content.
 //            reminderDao.deleteAll()
 
             val contentValues = ContentValues()

@@ -8,9 +8,6 @@ import java.util.*
  * Created by Eliran Elbaz on 01-May-20.
  */
 internal object DummyData {
-    fun poi(): ContentValues {
-        return ContentValues()
-    }
 
     fun reminderOne(): ContentValues {
         val contentValues = ContentValues()
