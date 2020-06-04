@@ -8,9 +8,6 @@ import java.util.*
  * Created by Eliran Elbaz on 01-May-20.
  */
 internal object DummyData {
-    fun poi(): ContentValues {
-        return ContentValues()
-    }
 
     fun reminderOne(): ContentValues {
         val contentValues = ContentValues()
@@ -49,7 +46,7 @@ internal object DummyData {
         contentValues.put("eventAddress", "Paris 75015")
         contentValues.put("repeatTimes", 2)
         contentValues.put("isRepeating", true)
-        contentValues.put("isActive", true)
+        contentValues.put("isActive", false)
 
         return contentValues
     }

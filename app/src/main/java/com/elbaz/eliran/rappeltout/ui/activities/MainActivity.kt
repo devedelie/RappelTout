@@ -10,7 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.elbaz.eliran.rappeltout.R
+import com.elbaz.eliran.rappeltout.data.db.ReminderRoomDB.Companion.getDatabase
+import com.elbaz.eliran.rappeltout.data.repositories.ReminderRepository
 import com.elbaz.eliran.rappeltout.databinding.ActivityMainBinding
 import com.elbaz.eliran.rappeltout.events.BackBtnPressEvent
 import com.elbaz.eliran.rappeltout.events.EditFragmentEvent
