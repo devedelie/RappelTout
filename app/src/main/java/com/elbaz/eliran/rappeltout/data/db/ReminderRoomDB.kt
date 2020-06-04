@@ -19,59 +19,94 @@ abstract class ReminderRoomDB : RoomDatabase() {
 
     abstract fun reminderDao() : ReminderDAO
 
-    // --- INSTANCE ---
-    companion object{
-        // Singleton prevents multiple instances of database opening at the same time.
-        @Volatile
+    companion object {
         private var INSTANCE: ReminderRoomDB? = null
-
-        fun getDatabase(
-            context : Context,
-            scope: CoroutineScope
-        ) : ReminderRoomDB {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    ReminderRoomDB::class.java,
-                    "reminder_database"
-                )
-                    .addCallback(ReminderDatabaseCallback(scope))
-                    .build()
-                INSTANCE = instance
-                // return instance
-                instance
+        // --- INSTANCE ---
+        open fun getDatabase(context:Context): ReminderRoomDB? {
+            if (INSTANCE == null) {
+                synchronized(
+                    ReminderRoomDB::class.java)
+                {
+                    if (INSTANCE == null) {
+                        INSTANCE =
+                            Room.databaseBuilder(
+                                context.applicationContext,
+                                ReminderRoomDB::class.java,
+                                "reminder_database")
+                                .addCallback(prepopulateDatabase())
+                                .build()
+                    }
+                }
             }
+            return INSTANCE
         }
-    }
 
-
-    //--------------------
-    // CallBack
-    //---------------------
-
-    private class ReminderDatabaseCallback(
-        private val scope: CoroutineScope
-    ) : RoomDatabase.Callback() {
-
-        override fun onOpen(db: SupportSQLiteDatabase) {
-            super.onOpen(db)
-            INSTANCE?.let { database ->
-                scope.launch {
-                    populateDatabase(database.reminderDao(), db)
+        private fun prepopulateDatabase(): Callback {
+            return object : Callback() {
+                override fun onCreate(db:SupportSQLiteDatabase) {
+                    super.onCreate(db)
+                    val contentValues = ContentValues()
+                    // Insert dummy data
+                    db.insert("reminder_table", OnConflictStrategy.IGNORE, DummyData.reminderOne())
+                    db.insert("reminder_table", OnConflictStrategy.IGNORE, DummyData.reminderTwo())
                 }
             }
         }
-
-        suspend fun populateDatabase(reminderDao: ReminderDAO, @NonNull db : SupportSQLiteDatabase) {
-            // Delete all content.
-//            reminderDao.deleteAll()
-
-            val contentValues = ContentValues()
-
-            db.insert("reminder_table", OnConflictStrategy.IGNORE, DummyData.reminderOne())
-            db.insert("reminder_table", OnConflictStrategy.IGNORE, DummyData.reminderTwo())
-
-        }
     }
+
+//    // --- INSTANCE ---
+//    companion object{
+//        // Singleton prevents multiple instances of database opening at the same time.
+//        @Volatile
+//        private var INSTANCE: ReminderRoomDB? = null
+//
+//        fun getDatabase(
+//            context : Context,
+//            scope: CoroutineScope
+//        ) : ReminderRoomDB {
+//            return INSTANCE ?: synchronized(this) {
+//                val instance = Room.databaseBuilder(
+//                    context.applicationContext,
+//                    ReminderRoomDB::class.java,
+//                    "reminder_database"
+//                )
+//                    .addCallback(ReminderDatabaseCallback(scope))
+//                    .build()
+//                INSTANCE = instance
+//                // return instance
+//                instance
+//            }
+//        }
+//    }
+//
+//
+//    //--------------------
+//    // CallBack
+//    //---------------------
+//
+//    private class ReminderDatabaseCallback(
+//        private val scope: CoroutineScope
+//    ) : RoomDatabase.Callback() {
+//
+//        override fun onOpen(db: SupportSQLiteDatabase) {
+//            super.onOpen(db)
+//            INSTANCE?.let { database ->
+//                scope.launch {
+//                    populateDatabase(database.reminderDao(), db)
+//                }
+//            }
+//        }
+//
+//        suspend fun populateDatabase(reminderDao: ReminderDAO, @NonNull db : SupportSQLiteDatabase) {
+//            // Delete all content.
+////            reminderDao.deleteAll()
+//
+//            val contentValues = ContentValues()
+//
+//            db.insert("reminder_table", OnConflictStrategy.IGNORE, DummyData.reminderOne())
+//            db.insert("reminder_table", OnConflictStrategy.IGNORE, DummyData.reminderTwo())
+//
+//        }
+//    }
 
 }
