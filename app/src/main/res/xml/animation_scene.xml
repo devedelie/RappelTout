@@ -7,8 +7,13 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 <Transition
     app:constraintSetStart="@+id/start"
     app:constraintSetEnd="@+id/end"
-    app:duration="1000">
+    app:duration="10000">
     <!-- MotionLayout will handle clicks on @id/star to "toggle" the animation between the start and end -->
+    <OnSwipe
+        app:touchAnchorId="@id/imageView"
+        app:touchAnchorSide="bottom"
+        app:dragDirection="dragRight"
+        />
 </Transition>
 
 <!-- Constraints to apply at the end of the animation -->
@@ -19,8 +24,8 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         android:layout_height="wrap_content"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_editor_absoluteY="361dp"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_editor_absoluteY="6dp"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintEnd_toStartOf="parent" />
 </ConstraintSet>
 
@@ -32,8 +37,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        android:layout_marginEnd="140dp"
-        app:layout_editor_absoluteY="364dp"
-        android:layout_marginRight="140dp" />
+        app:layout_editor_absoluteY="3dp"
+        app:layout_constraintStart_toStartOf="parent" />
 </ConstraintSet>
 </MotionScene>
