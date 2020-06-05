@@ -24,6 +24,7 @@ import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
 import com.elbaz.eliran.rappeltout.utils.Utils
 import com.firebase.ui.auth.AuthUI
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_calendar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -82,8 +83,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadFragment(fragment: Fragment){
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.host_fragment, fragment)
-        fragmentTransaction.commit()
+            .addSharedElement(start_view, "shared_element_container") // apply transaction between shared elements
+            .replace(R.id.host_fragment, fragment, fragment.tag)
+            .addToBackStack(fragment.tag)
+            .commit()
         // Show/Hide view elements
         if (fragment == editReminderFragment){
             binding.floatingBtn.hide()

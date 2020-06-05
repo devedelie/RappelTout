@@ -20,6 +20,7 @@ import com.elbaz.eliran.rappeltout.model.Reminder
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
 import com.elbaz.eliran.rappeltout.utils.Utils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.android.synthetic.main.back_btn_bar.*
 import kotlinx.android.synthetic.main.fragment_edit_reminder.*
 import org.greenrobot.eventbus.EventBus
@@ -36,6 +37,11 @@ class EditReminderFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private val cal = Calendar.getInstance()
     private var isEditMode : Boolean = false
+
+    override fun onCreate(savedInstanceState: Bundle?)  {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform() // Transaction animation
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
