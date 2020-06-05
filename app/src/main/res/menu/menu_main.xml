@@ -9,6 +9,13 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_privacy"
+        android:orderInCategory="100"
+        android:title="@string/action_privacy"
+        app:showAsAction="never"
+        android:onClick="invokePrivacyActivity"/>
+
+    <item
         android:id="@+id/action_Logout"
         android:orderInCategory="100"
         android:title="@string/action_logout"

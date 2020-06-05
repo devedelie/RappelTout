@@ -1,5 +1,6 @@
 package com.elbaz.eliran.rappeltout.ui.activities
 
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -106,6 +107,11 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun invokePrivacyActivity(item: MenuItem){
+        val intent = Intent (this@MainActivity, PrivacyPolicyActivity::class.java)
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
     fun logout(item: MenuItem){
