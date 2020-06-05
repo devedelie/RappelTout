@@ -5,16 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.elbaz.eliran.rappeltout.R
-import com.elbaz.eliran.rappeltout.data.db.ReminderRoomDB.Companion.getDatabase
-import com.elbaz.eliran.rappeltout.data.repositories.ReminderRepository
 import com.elbaz.eliran.rappeltout.databinding.ActivityMainBinding
 import com.elbaz.eliran.rappeltout.events.BackBtnPressEvent
 import com.elbaz.eliran.rappeltout.events.EditFragmentEvent
@@ -23,13 +19,12 @@ import com.elbaz.eliran.rappeltout.ui.fragments.EditReminderFragment
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
 import com.elbaz.eliran.rappeltout.utils.Utils
 import com.firebase.ui.auth.AuthUI
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
 
 
 class MainActivity : AppCompatActivity() {
@@ -37,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     // Obtain ViewModel from ViewModelProviders
     private val viewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
     lateinit var binding : ActivityMainBinding
+
     // Fragments
     private val calendarFragment = CalendarFragment()
     private val editReminderFragment = EditReminderFragment()
@@ -77,24 +73,13 @@ class MainActivity : AppCompatActivity() {
         loadFragment(editReminderFragment)
     }
 
-    fun onFloatingBtnClicked(view: View){
-            loadFragment(editReminderFragment)
-    }
 
     private fun loadFragment(fragment: Fragment){
         val fragmentTransaction = supportFragmentManager.beginTransaction()
-            .addSharedElement(start_view, "shared_element_container") // apply transaction between shared elements
-            .replace(R.id.host_fragment, fragment, fragment.tag)
-            .addToBackStack(fragment.tag)
-            .commit()
-        // Show/Hide view elements
-        if (fragment == editReminderFragment){
-            binding.floatingBtn.hide()
-            supportActionBar!!.hide()
-        }else if(fragment == calendarFragment){
-            binding.floatingBtn.show()
-            supportActionBar!!.show()
-        }
+        fragmentTransaction.addSharedElement(floatingBtn, "shared_element_container") // apply transaction between shared elements
+        fragmentTransaction.replace(R.id.host_fragment, fragment, fragment.tag)
+        fragmentTransaction.addToBackStack(fragment.tag)
+        fragmentTransaction.commit()
     }
 
 

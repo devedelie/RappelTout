@@ -1,6 +1,7 @@
 package com.elbaz.eliran.rappeltout.ui.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,14 +20,16 @@ import com.elbaz.eliran.rappeltout.ui.adapters.ReminderListAdapter
 import com.elbaz.eliran.rappeltout.ui.viewmodels.MainViewModel
 import com.elbaz.eliran.rappeltout.utils.ItemClickSupport
 import com.elbaz.eliran.rappeltout.utils.Utils
-import com.google.gson.Gson
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import org.greenrobot.eventbus.EventBus
+
 
 class CalendarFragment : Fragment() {
 
 //    private val viewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
     private lateinit var viewModel: MainViewModel
+    lateinit var fab: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +46,6 @@ class CalendarFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.mainViewModel = viewModel
 
-
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -53,8 +55,16 @@ class CalendarFragment : Fragment() {
 
         calendarConfig(view)
         recyclerViewConfig()
+        configureFab()
         configureOnClickRecyclerView()
         setDatabaseObserver()
+    }
+
+    private fun configureFab(){
+        fab = requireView().findViewById(R.id.floatingBtn) as FloatingActionButton
+        fab.setOnClickListener {
+            EventBus.getDefault().post(EditFragmentEvent()) // Event to inflate the fragment
+        }
     }
 
 
