@@ -1,10 +1,13 @@
 package com.elbaz.eliran.rappeltout.ui.activities
 
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.elbaz.eliran.rappeltout.R
@@ -18,10 +21,12 @@ import kotlinx.coroutines.launch
 import net.danlew.android.joda.JodaTimeAndroid
 
 open class SplashScreenActivity : AppCompatActivity() {
+    lateinit var moon: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
+        moon = findViewById(R.id.moon)
 
         JodaTimeAndroid.init(this)  // Initialize JudaTime
     }
@@ -33,6 +38,7 @@ open class SplashScreenActivity : AppCompatActivity() {
             displayMobileDataSettingsDialog(this, this)
         } else {
             CoroutineScope(Main).launch {
+                animateMoon()
                 fakeNetworkRequest() // Fake network delay to show loading animation
                 when (isCurrentUserLogged()){
                     true -> intentActivity(MainActivity::class.java)
@@ -44,6 +50,11 @@ open class SplashScreenActivity : AppCompatActivity() {
 
     private suspend fun fakeNetworkRequest(){
         delay(1000)
+    }
+
+    private fun animateMoon(){
+        val animator = ObjectAnimator.ofFloat(moon, View.TRANSLATION_X, 300f)
+        animator.start()
     }
 
     // --------------------
