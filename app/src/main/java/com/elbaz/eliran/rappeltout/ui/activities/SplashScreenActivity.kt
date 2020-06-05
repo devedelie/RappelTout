@@ -52,7 +52,7 @@ open class SplashScreenActivity : AppCompatActivity() {
 
     open fun intentActivity(classname: Class<*>) {
         val intent = Intent(this, classname)
-        startActivity(intent)
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
     // --------------------

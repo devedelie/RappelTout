@@ -16,7 +16,7 @@ import com.elbaz.eliran.rappeltout.data.repositories.ReminderRepository
 import com.elbaz.eliran.rappeltout.model.Reminder
 import com.elbaz.eliran.rappeltout.receiver.AlarmReceiver
 import com.elbaz.eliran.rappeltout.utils.Utils
-import com.elbaz.eliran.rappeltout.utils.singleArgViewModelFactory
+import com.elbaz.eliran.rappeltout.injection.singleArgViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.joda.time.DateTime

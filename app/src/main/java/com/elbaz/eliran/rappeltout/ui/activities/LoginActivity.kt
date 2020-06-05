@@ -1,6 +1,7 @@
 package com.elbaz.eliran.rappeltout.ui.activities
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
@@ -116,12 +117,12 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent (this@LoginActivity, MainActivity::class.java)
         intent.flags =
             Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
     fun invokePrivacyPolicy(view: View) {
         val intent = Intent (this@LoginActivity, PrivacyPolicyActivity::class.java)
-        startActivity(intent)
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
     }
 
     // --------------------

@@ -1,4 +1,4 @@
-package com.elbaz.eliran.rappeltout.utils
+package com.elbaz.eliran.rappeltout.injection
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
