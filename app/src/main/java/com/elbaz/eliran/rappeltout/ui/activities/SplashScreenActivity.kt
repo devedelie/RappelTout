@@ -11,6 +11,10 @@ import com.elbaz.eliran.rappeltout.R
 import com.elbaz.eliran.rappeltout.utils.Utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.danlew.android.joda.JodaTimeAndroid
 
 open class SplashScreenActivity : AppCompatActivity() {
@@ -28,16 +32,19 @@ open class SplashScreenActivity : AppCompatActivity() {
         if (!Utils.isInternetAvailable(this)) {
             displayMobileDataSettingsDialog(this, this)
         } else {
-        when (isCurrentUserLogged()){
-            true -> intentActivity(MainActivity::class.java)
-            else -> intentActivity(LoginActivity::class.java)  // Go to Login screen if logged Off
-        }
+            CoroutineScope(Main).launch {
+                fakeNetworkRequest() // Fake network delay to show loading animation
+                when (isCurrentUserLogged()){
+                    true -> intentActivity(MainActivity::class.java)
+                    else -> intentActivity(LoginActivity::class.java)  // Go to Login screen if logged Off
+                }
+            }
         }
     }
 
-//    private suspend fun waitForDelay(){
-//        delay(500)
-//    }
+    private suspend fun fakeNetworkRequest(){
+        delay(1000)
+    }
 
     // --------------------
     // UTILS
