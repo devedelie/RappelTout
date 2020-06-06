@@ -22,7 +22,7 @@ abstract class ReminderRoomDB : RoomDatabase() {
     companion object {
         private var INSTANCE: ReminderRoomDB? = null
         // --- INSTANCE ---
-        open fun getDatabase(context:Context): ReminderRoomDB? {
+        open fun getInstance(context:Context): ReminderRoomDB? {
             if (INSTANCE == null) {
                 synchronized(
                     ReminderRoomDB::class.java)

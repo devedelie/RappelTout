@@ -45,7 +45,7 @@ class MainViewModel (private val app: Application) : AndroidViewModel(app) {
 //    }
 
     init{
-        val reminderDao = ReminderRoomDB.getDatabase(app)?.reminderDao()
+        val reminderDao = ReminderRoomDB.getInstance(app)?.reminderDao()
         repository = reminderDao?.let { ReminderRepository(it) }!!
         allReminders = repository.allReminders
     }

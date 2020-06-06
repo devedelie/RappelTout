@@ -80,6 +80,12 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.host_fragment, fragment, fragment.tag)
         fragmentTransaction.addToBackStack(fragment.tag)
         fragmentTransaction.commit()
+        // Show/Hide view elements
+        if (fragment == editReminderFragment){
+            supportActionBar!!.hide()
+        }else if(fragment == calendarFragment){
+            supportActionBar!!.show()
+        }
     }
 
 
