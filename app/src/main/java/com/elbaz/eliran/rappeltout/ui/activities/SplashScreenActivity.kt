@@ -49,11 +49,11 @@ open class SplashScreenActivity : AppCompatActivity() {
     }
 
     private suspend fun fakeNetworkRequest(){
-        delay(1000)
+        delay(2000)
     }
 
     private fun animateMoon(){
-        val animator = ObjectAnimator.ofFloat(moon, View.TRANSLATION_X, 300f)
+        val animator = ObjectAnimator.ofFloat(moon, View.TRANSLATION_X, -700f)
         animator.start()
     }
 
