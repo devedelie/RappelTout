@@ -81,10 +81,9 @@ class MainActivity : AppCompatActivity() {
         fragmentTransaction.addToBackStack(fragment.tag)
         fragmentTransaction.commit()
         // Show/Hide view elements
-        if (fragment == editReminderFragment){
-            supportActionBar!!.hide()
-        }else if(fragment == calendarFragment){
-            supportActionBar!!.show()
+        when (fragment){
+            editReminderFragment -> supportActionBar?.hide()
+            calendarFragment-> supportActionBar?.show()
         }
     }
 
